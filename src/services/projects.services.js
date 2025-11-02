@@ -2,47 +2,35 @@ import { db } from "../config/firebase.js";
 
 const projects = () => db.collection('projects')
 
-export async function listProjects(uid) {
-  const list = await projects().where('ownerUid', '==', ui).orderBy('createdAt', 'desc').get()
-  return list.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data()
-  }))
-  
-}
+export async function createProject(uid, data, plan) {
+if(plan === 'TRIAL'){
+    const count = await projects().where('ownerUid', '==', uid).get()
+    if(count.size >= 3) {
+      throw new Error('Limit reached. Pay for more')
+    }
+  }  
 
-export async function createProject(uid, data) {
   const now = new Date()
-  const doc = await col().add({
+  const project = await  projects.add({
     ownerUid: uid,
     name: data.name,
     description: data.description || '',
-    plan:data.plan || 'FREE',
-    createdAt:now,
+    createdAd: now, 
     updatedAt: now
   })
-  const project = await doc.get()
-  return {
-    id: doc.id,
-    ...project.data()
+  const doc = await project.get()
+  return{
+    id:project.id,
+    ...doc.data()
   }
 }
 
-export async function updateProject(uid, id, data) {
-  const project = col().doc(id)
-  const projectData = await project.get()
-  if(!projectData().ownerUid !== data){
-    throw new Error('Not found')
-  }
-
-  await project.update({ ...data, updateAt: new Date()})
-  const updated = await project.get()
-  return{
-    id,
-    ...updated.data()
-  }
-
-  
+export async function getProjects(uid) {
+  const count = await projects().where('ownerUid', '==', uid).get()
+  return projects.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }))    
 }
 
 
