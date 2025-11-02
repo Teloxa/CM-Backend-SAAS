@@ -1,0 +1,31 @@
+{
+  "name": "cm-backend-saas",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.js", 
+    "start": "node/src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Teloxa/CM-Backend-SAAS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Teloxa/CM-Backend-SAAS/issues"
+  },
+  "homepage": "https://github.com/Teloxa/CM-Backend-SAAS#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "firebase-admin": "^13.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

@@ -1,26 +1,22 @@
-import { authAdmin } from "firebase-admin";
+import jwt from 'jsonwebtoken'
+import {env} from '../config/env'
 
-export async function  verifyAuth(req, res, next) {
+export function verifyToken(req, res, next) {
   try {
-    const header = req.headers.authorization || ''
-    const [, token] = header.split(' ')
-    if(!token) {
-      return res.status(401).json({
-        ok: false,
-        message: 'No token provided'
+    const authHeader = req.headers.authorization
+    if(!authHeader){
+      res.status(401).json({
+        message: 'Token required'
       })
     }
-    const decoded = await authAdmin.verifyIdToken(token)
-    req.user = {
-      uid: decoded.uid,
-      email: decoded.email
-    }
+    const token = authHeader.split(' ')[1]
+    const decoded = jwt.verify(token, env.JWT_SECRET)
+    req.user = decoded
     next()
+    
   } catch (error) {
-    console.log('@@@ Error =>', error)
     res.status(401).json({
-      ok: false,
-      message: 'Invalid token'
+      message: 'Invalid dToken'
     })
   }
 }
